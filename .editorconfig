@@ -10,3 +10,6 @@ insert_final_newline = true
 
 [*.cmd]
 end_of_line = lf
+
+[*.html]
+indent_size = 2
