@@ -9,16 +9,21 @@ import com.example.omaapinions.dto.SurveyDto;
 import static com.example.omaapinions.mapper.SurveyMapper.mapToSurvey;
 import static com.example.omaapinions.mapper.SurveyMapper.mapToSurveyDto;
 import com.example.omaapinions.models.Survey;
+import com.example.omaapinions.repository.SubmissionRepository;
 import com.example.omaapinions.repository.SurveyRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class SurveyService {
 
     @SuppressWarnings("FieldMayBeFinal")
     private SurveyRepository surveyRepository;
+    private SubmissionRepository submissionRepository;
 
-    public SurveyService(SurveyRepository surveyRepository) {
+    public SurveyService(SurveyRepository surveyRepository, SubmissionRepository submissionRepository) {
         this.surveyRepository = surveyRepository;
+        this.submissionRepository = submissionRepository;
     }
 
     public List<SurveyDto> findAllSurveys() {
@@ -46,7 +51,9 @@ public class SurveyService {
         this.surveyRepository.save(survey);
     }
 
+    @Transactional
     public void delete(long surveyId) {
+        this.submissionRepository.deleteBySurveyId(surveyId);
         this.surveyRepository.deleteById(surveyId);
     }
 

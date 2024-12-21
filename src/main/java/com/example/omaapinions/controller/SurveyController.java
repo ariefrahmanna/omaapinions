@@ -100,7 +100,7 @@ public class SurveyController {
 
         this.surveyService.saveSurvey(surveyDto);
 
-        return "redirect:/surveys";
+        return "redirect:/surveys?add";
     }
 
     @GetMapping("/surveys/{surveyId}")
@@ -135,13 +135,13 @@ public class SurveyController {
         survey.setId(surveyId);
         this.surveyService.updateSurvey(survey);
 
-        return ("redirect:/surveys");
+        return ("redirect:/surveys?edit");
     }
 
     @GetMapping("surveys/delete/{surveyId}")
     public String deleteSurvey(@PathVariable("surveyId") long surveyId) {
         this.surveyService.delete(surveyId);
 
-        return "redirect:/surveys";
+        return "redirect:/surveys?del";
     }
 }
