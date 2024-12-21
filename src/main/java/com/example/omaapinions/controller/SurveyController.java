@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -69,6 +70,7 @@ public class SurveyController {
         return "survey-list";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/surveys/new")
     public String addSurvey(Model model) {
         model.addAttribute("survey", new Survey());
@@ -103,6 +105,7 @@ public class SurveyController {
         return "redirect:/surveys?add";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/surveys/{surveyId}")
     public String showQuestions(@PathVariable("surveyId") long surveyId, Model model) {
         String username = SecurityUtil.getSessionUser();
@@ -117,6 +120,7 @@ public class SurveyController {
         return "questions-list";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("surveys/edit/{surveyId}")
     public String editSurveys(@PathVariable("surveyId") long surveyId, Model model) {
         SurveyDto survey = this.surveyService.findSurveyById(surveyId);
@@ -138,6 +142,7 @@ public class SurveyController {
         return ("redirect:/surveys?edit");
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("surveys/delete/{surveyId}")
     public String deleteSurvey(@PathVariable("surveyId") long surveyId) {
         this.surveyService.delete(surveyId);
