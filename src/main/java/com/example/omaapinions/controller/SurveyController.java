@@ -126,14 +126,14 @@ public class SurveyController {
         SurveyDto survey = this.surveyService.findSurveyById(surveyId);
         model.addAttribute("survey", survey);
 
-        return "surveys-edit";
+        return "survey-edit";
     }
 
     @PostMapping("/surveys/edit/{surveyId}")
     public String updateSurvey(@PathVariable("surveyId") long surveyId,
             @Valid @ModelAttribute("survey") SurveyDto survey, BindingResult result) {
         if (result.hasErrors()) {
-            return "surveys-edit";
+            return "survey-edit";
         }
 
         survey.setId(surveyId);
