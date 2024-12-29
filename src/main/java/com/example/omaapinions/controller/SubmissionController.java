@@ -1,8 +1,11 @@
 package com.example.omaapinions.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -70,5 +73,18 @@ public class SubmissionController {
         }
 
         return "redirect:/surveys?submit";
+    }
+
+    @GetMapping("/leaderboard")
+    public String getLeaderboard(Model model) {
+        List<UserSurvey> users = userService.usersBySubmissionCount();
+
+        for (UserSurvey user : users) {
+            this.submissionService.updateUserSubmissionCount(user);
+        }
+
+        model.addAttribute("users", users);
+
+        return "leaderboard";
     }
 }
