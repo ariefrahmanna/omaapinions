@@ -1,6 +1,7 @@
 package com.example.omaapinions.service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,5 +50,13 @@ public class UserService {
 
     public UserSurvey findByUsername(String username) {
         return this.userRepository.findByUsername(username);
+    }
+
+    public List<UserSurvey> usersBySubmissionCount() {
+        return this.userRepository.findAllByOrderBySubmissionCountDesc();
+    }
+
+    public void save(UserSurvey user) {
+        this.userRepository.save(user);
     }
 }
