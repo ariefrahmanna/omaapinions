@@ -24,9 +24,20 @@ public class SubmissionService {
         this.submissionRepository.save(submission);
     }
 
-    public boolean surveyTaken(Long surveyId, String username) {
-        UserSurvey user = this.userRepository.findByEmail(username);
+    public boolean surveyTaken(Long surveyId, String email) {
+        UserSurvey user = this.userRepository.findByEmail(email);
 
         return this.submissionRepository.existsBySurveyIdAndUser(surveyId, user);
+    }
+
+    public long countSubmissionBySurveyId(long surveyId) {
+        return this.submissionRepository.countSubmissionBySurveyId(surveyId);
+    }
+
+    public void updateUserSubmissionCount(UserSurvey user) {
+        long submissionCount = this.submissionRepository.countSubmissionByUserId(user.getId());
+
+        user.setSubmissionCount(submissionCount);
+        this.userRepository.save(user);
     }
 }
