@@ -28,8 +28,8 @@ public class QuestionController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/questions/new/{surveyId}")
-    public String createQuestionForm(@PathVariable("surveyId") long surveyId, Model model) {
+    @GetMapping("/surveys/{surveyId}/questions")
+    public String createQuestionForm(@PathVariable long surveyId, Model model) {
         Question question = new Question();
         SurveyDto surveyDto = this.surveyService.findSurveyById(surveyId);
 
@@ -40,8 +40,8 @@ public class QuestionController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/questions/edit/{questionId}")
-    public String editQuestion(@PathVariable("questionId") long questionId, Model model) {
+    @GetMapping("/questions/{questionId}/edit")
+    public String editQuestion(@PathVariable long questionId, Model model) {
         QuestionDto questionDto = this.questionService.findQuestionById(questionId);
 
         model.addAttribute("question", questionDto);
@@ -49,33 +49,41 @@ public class QuestionController {
         return "questions-edit";
     }
 
-    @PostMapping("/questions/{surveyId}")
-    public String createQuestionForm(@PathVariable("surveyId") Long surveyId,
+    @PostMapping("/surveys/{surveyId}/questions")
+    public String createQuestionForm(@PathVariable Long surveyId,
             @ModelAttribute("question") QuestionDto questionDto, Model model) {
+        String route = String.format("/surveys/%d/questions", surveyId);
+
         this.questionService.createQuestion(surveyId, questionDto);
 
-        return "redirect:/questions/new/" + surveyId;
+        return "redirect:" + route;
     }
 
-    @PostMapping("/questions/edit/{questionId}")
-    public String updateQuestion(@PathVariable("questionId") long questionId,
+    @PostMapping("/questions/{questionId}/edit")
+    public String updateQuestion(@PathVariable long questionId,
             @ModelAttribute("question") QuestionDto questionDto, Model model) {
         QuestionDto questionDtoById = this.questionService.findQuestionById(questionId);
+        long surveyId = questionDtoById.getSurvey().getId();
+        SurveyDto surveyDto = this.surveyService.findSurveyById(surveyId);
+        String route = String.format("/surveys/%d/questions", surveyId);
 
         questionDto.setId(questionId);
         questionDto.setSurvey(questionDtoById.getSurvey());
-        this.questionService.updateQuestion(questionDto);
 
-        return ("redirect:/questions/new/" + questionDtoById.getSurvey().getId());
+        this.questionService.updateQuestion(questionDto);
+        model.addAttribute("survey", surveyDto);
+
+        return "redirect:" + route;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/questions/delete/{questionId}")
-    public String deleteQuestion(@PathVariable("questionId") long questionId) {
+    public String deleteQuestion(@PathVariable long questionId) {
         long surveyId = this.questionService.findQuestionById(questionId).getSurvey().getId();
+        String route = String.format("/surveys/%d/questions", surveyId);
 
         this.questionService.deleteQuestion(questionId);
 
-        return "redirect:/questions/new/" + surveyId;
+        return "redirect:" + route;
     }
 }
