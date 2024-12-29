@@ -13,6 +13,7 @@
 <body>
   <section layout:fragment="body" class="py-5">
     <div class="container mt-5">
+      <h2 class="mb-4">Available Surveys</h2>
       <div> <!--alert with different params-->
         <div th:if="${param.surveyTaken}" class="alert alert-danger">
           Survey Has been Taken
@@ -29,51 +30,30 @@
         <div th:if="${param.del}" class="alert alert-success">
           Survey succesfully deleted!
         </div>
-        <h1 class="mb-4">SURVEY LIST</h1>
         <div>
         </div>
-        <form th:action="@{/surveys/search}" class="form0-inline my-2 my-lg-0 mb-3">
-          <input name="query" class="form-control mr-sm-2 mb-5" type="search" placeholder="search surveys"
+        <form th:action="@{/surveys/search}" class="form-inline my-2 my-lg-0 mb-3">
+          <input name="query" class="form-control mr-sm-2 mb-5" type="search" placeholder="Search Surveys"
             aria-label="Search">
         </form>
       </div>
-      <h2 class="mb-4">Available Surveys</h2>
       <!-- Iterasi untuk setiap kategori -->
       <div class="mb-4" th:each="category : ${categories}">
-        <h4 class="text-primary" th:text="${category}">Category Name</h4>
+        <h4 class="text-primary">[[${category}]]</h4>
         <ul class="list-group">
           <!-- Iterasi survey in kategori -->
           <li class="list-group-item d-flex justify-content-between align-items-center"
             th:each="survey : ${surveysByCategory.get(category)}">
-            <div class="d-flex justify-content-between w-100 align-items-center">
-              <div>
-                <span th:text="${survey.title}" class="fw-bold">Survey Title</span>
+            <a class="text-decoration-none" th:href="@{/surveys/{surveyId}(surveyId=${survey.id})}">
+              <div class="d-flex justify-content-between w-100 align-items-center">
                 <div>
-                  <small class="text-muted" th:text="'Duration: ' + ${survey.duration} + ' minutes'"></small>
+                  <span class="fw-bold">[[${survey.title}]]</span>
+                  <div>
+                    <small class="text-muted">Duration: [[${survey.duration}]] minutes</small>
+                  </div>
                 </div>
               </div>
-              <!-- Tombol -->
-              <div class="d-flex">
-                <a th:href="@{/surveys/{surveyId}(surveyId=${survey.id})}"
-                  class="btn btn-success btn-sm px-4 fw-medium py-2 me-2">
-                  Take Survey
-                </a>
-                <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-                  <a th:href="@{/questions/new/{surveyId}(surveyId=${survey.id})}"
-                    class="btn btn-primary btn-sm px-4 fw-medium py-2 me-2">
-                    Modify Questions
-                  </a>
-                  <a th:href="@{/surveys/edit/{surveyId}(surveyId=${survey.id})}"
-                    class="btn btn-warning btn-sm px-4 fw-medium py-2 me-2">
-                    Edit
-                  </a>
-                  <a th:href="@{/surveys/delete/{surveyId}(surveyId=${survey.id})}"
-                    class="btn btn-danger btn-sm px-4 fw-medium py-2" onclick="return confirm('delete this survey?')">
-                    Delete
-                  </a>
-                </div>
-              </div>
-            </div>
+            </a>
           </li>
           <!-- Pesan jika tidak ada survey dalam kategori -->
           <li class="list-group-item text-muted" th:if="${surveysByCategory.get(category).empty}">

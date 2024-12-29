@@ -60,10 +60,23 @@ public class SurveyController {
 
         if (username != null) {
             user = this.userService.findByUsername(username);
-            model.addAttribute("user", user);
         }
 
         model.addAttribute("user", user);
+        model.addAttribute("categories", categories);
+        model.addAttribute("surveysByCategory", surveysByCategory);
+
+        return "survey-list";
+    }
+
+    @GetMapping("/surveys/search")
+    public String searchSurvey(@RequestParam String query, Model model) {
+        List<SurveyDto> surveys = this.surveyService.searchSurveys(query);
+        Map<String, List<SurveyDto>> surveysByCategory = surveys.stream()
+                .collect(Collectors.groupingBy(SurveyDto::getCategory));
+        List<String> categories = new ArrayList<>(surveysByCategory.keySet());
+
+        Collections.sort(categories);
         model.addAttribute("categories", categories);
         model.addAttribute("surveysByCategory", surveysByCategory);
 
@@ -76,20 +89,6 @@ public class SurveyController {
         model.addAttribute("survey", new Survey());
 
         return "survey-create";
-    }
-
-    @GetMapping("/surveys/search")
-    public String searchSurvey(@RequestParam(value = "query") String query, Model model) {
-        List<SurveyDto> surveys = this.surveyService.searchSurveys(query);
-        Map<String, List<SurveyDto>> surveysByCategory = surveys.stream()
-                .collect(Collectors.groupingBy(SurveyDto::getCategory));
-        List<String> categories = new ArrayList<>(surveysByCategory.keySet());
-
-        Collections.sort(categories);
-        model.addAttribute("categories", categories);
-        model.addAttribute("surveysByCategory", surveysByCategory);
-
-        return "survey-list";
     }
 
     @PostMapping("/surveys/new")
@@ -105,9 +104,9 @@ public class SurveyController {
         return "redirect:/surveys?add";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/surveys/{surveyId}")
-    public String showQuestions(@PathVariable("surveyId") long surveyId, Model model) {
+    // @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/surveys/{surveyId}/submit")
+    public String fillSurvey(@PathVariable long surveyId, Model model) {
         String username = SecurityUtil.getSessionUser();
 
         if (this.submissionService.surveyTaken(surveyId, username)) {
@@ -121,30 +120,30 @@ public class SurveyController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("surveys/edit/{surveyId}")
-    public String editSurveys(@PathVariable("surveyId") long surveyId, Model model) {
+    @GetMapping("/surveys/{surveyId}/edit")
+    public String editSurvey(@PathVariable long surveyId, Model model) {
         SurveyDto survey = this.surveyService.findSurveyById(surveyId);
         model.addAttribute("survey", survey);
 
-        return "survey-edit";
+        return "surveys-edit";
     }
 
-    @PostMapping("/surveys/edit/{surveyId}")
-    public String updateSurvey(@PathVariable("surveyId") long surveyId,
-            @Valid @ModelAttribute("survey") SurveyDto survey, BindingResult result) {
+    @PostMapping("/surveys/{surveyId}/edit")
+    public String updateSurvey(@PathVariable long surveyId,
+            @Valid @ModelAttribute("survey") SurveyDto surveyDto, BindingResult result) {
         if (result.hasErrors()) {
-            return "survey-edit";
+            return "surveys-edit";
         }
 
-        survey.setId(surveyId);
-        this.surveyService.updateSurvey(survey);
+        surveyDto.setId(surveyId);
+        this.surveyService.updateSurvey(surveyDto);
 
         return ("redirect:/surveys?edit");
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("surveys/delete/{surveyId}")
-    public String deleteSurvey(@PathVariable("surveyId") long surveyId) {
+    @GetMapping("/surveys/{surveyId}/delete")
+    public String deleteSurvey(@PathVariable long surveyId) {
         this.surveyService.delete(surveyId);
 
         return "redirect:/surveys?del";
