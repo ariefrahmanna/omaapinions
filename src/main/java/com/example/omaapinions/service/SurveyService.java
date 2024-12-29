@@ -19,6 +19,7 @@ public class SurveyService {
 
     @SuppressWarnings("FieldMayBeFinal")
     private SurveyRepository surveyRepository;
+    @SuppressWarnings("FieldMayBeFinal")
     private SubmissionRepository submissionRepository;
 
     public SurveyService(SurveyRepository surveyRepository, SubmissionRepository submissionRepository) {
