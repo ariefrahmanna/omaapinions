@@ -42,15 +42,15 @@ public class SubmissionController {
     public String submitSurvey(@RequestParam("survey_id") Long surveyId, @RequestParam Map<String, String> answers) {
         UserSurvey user = new UserSurvey();
         Survey survey = mapToSurvey(this.surveyService.findSurveyById(surveyId));
-        String username = SecurityUtil.getSessionUser();
+        String email = SecurityUtil.getSessionUser();
 
-        if (username != null) {
-            user = this.userService.findByEmail(username);
+        if (email != null) {
+            user = this.userService.findByEmail(email);
         }
 
         for (Map.Entry<String, String> entry : answers.entrySet()) {
             String key = entry.getKey();
-            String value = entry.getValue();
+            String answer = entry.getValue();
 
             if (key.startsWith("answers[") && key.endsWith("]")) {
                 String questionIdStr = key.substring(8, key.length() - 1);
@@ -61,10 +61,12 @@ public class SubmissionController {
                 submission.setUser(user);
                 submission.setSurvey(survey);
                 submission.setQuestion(question);
-                submission.setAnswer(value);
+                submission.setAnswer(answer);
 
                 this.submissionService.save(submission);
             }
+
+            this.submissionService.updateUserSubmissionCount(user);
         }
 
         return "redirect:/surveys?submit";

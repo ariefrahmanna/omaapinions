@@ -90,6 +90,7 @@ public class SurveyController {
         boolean hasTakenSurvey = this.submissionService.surveyTaken(surveyId, username);
         boolean questionsEmpty = surveyDto.getQuestions().isEmpty();
         boolean canTakeSurvey = !hasTakenSurvey && !questionsEmpty;
+        long submissionCount = this.submissionService.countSubmissionBySurveyId(surveyId);
         String hoverMessage = hasTakenSurvey
                 ? "Survey already taken"
                 : questionsEmpty
@@ -99,6 +100,7 @@ public class SurveyController {
         model.addAttribute("survey", surveyDto);
         model.addAttribute("canTakeSurvey", canTakeSurvey);
         model.addAttribute("hoverMessage", hoverMessage);
+        model.addAttribute("submissionCount", submissionCount);
 
         return "survey-details";
     }
@@ -124,6 +126,7 @@ public class SurveyController {
         return "redirect:/surveys?add";
     }
 
+    // @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/surveys/{surveyId}/submit")
     public String fillSurvey(@PathVariable long surveyId, Model model) {
         String email = SecurityUtil.getSessionUser();
