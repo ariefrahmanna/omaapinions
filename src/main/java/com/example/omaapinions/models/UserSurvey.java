@@ -29,6 +29,7 @@ public class UserSurvey {
     private String username;
     private String email;
     private String password;
+    private long submissionCount;
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<RoleEnum> roles = new HashSet<>();
@@ -36,5 +37,5 @@ public class UserSurvey {
     public enum RoleEnum {
         ADMIN,
         USER
-    }
+    }
 }
