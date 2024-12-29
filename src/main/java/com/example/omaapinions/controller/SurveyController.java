@@ -149,7 +149,7 @@ public class SurveyController {
 
         model.addAttribute("survey", surveyDto);
 
-        return "surveys-edit";
+        return "survey-edit";
     }
 
     @PostMapping("/surveys/{surveyId}/edit")
@@ -158,7 +158,7 @@ public class SurveyController {
         String route = String.format("/surveys/%d?edit", surveyId);
 
         if (result.hasErrors()) {
-            return "surveys-edit";
+            return "survey-edit";
         }
 
         surveyDto.setId(surveyId);
