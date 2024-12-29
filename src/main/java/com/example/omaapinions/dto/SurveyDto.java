@@ -22,5 +22,6 @@ public class SurveyDto {
     private String category;
     @NotNull(message = "Duration should not be empty")
     private Integer duration;
+    private String description;
     private List<QuestionDto> questions;
 }

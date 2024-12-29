@@ -83,6 +83,26 @@ public class SurveyController {
         return "survey-list";
     }
 
+    @GetMapping("/surveys/{surveyId}")
+    public String surveyDetails(@PathVariable long surveyId, Model model) {
+        SurveyDto surveyDto = this.surveyService.findSurveyById(surveyId);
+        String username = SecurityUtil.getSessionUser();
+        boolean hasTakenSurvey = this.submissionService.surveyTaken(surveyId, username);
+        boolean questionsEmpty = surveyDto.getQuestions().isEmpty();
+        boolean canTakeSurvey = !hasTakenSurvey && !questionsEmpty;
+        String hoverMessage = hasTakenSurvey
+                ? "Survey already taken"
+                : questionsEmpty
+                        ? "Questions not available"
+                        : "";
+
+        model.addAttribute("survey", surveyDto);
+        model.addAttribute("canTakeSurvey", canTakeSurvey);
+        model.addAttribute("hoverMessage", hoverMessage);
+
+        return "survey-details";
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/surveys/new")
     public String addSurvey(Model model) {
@@ -104,16 +124,16 @@ public class SurveyController {
         return "redirect:/surveys?add";
     }
 
-    // @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/surveys/{surveyId}/submit")
     public String fillSurvey(@PathVariable long surveyId, Model model) {
-        String username = SecurityUtil.getSessionUser();
+        String email = SecurityUtil.getSessionUser();
 
-        if (this.submissionService.surveyTaken(surveyId, username)) {
+        if (this.submissionService.surveyTaken(surveyId, email)) {
             return "redirect:/surveys?surveyTaken";
         }
 
         SurveyDto surveyDto = this.surveyService.findSurveyById(surveyId);
+
         model.addAttribute("survey", surveyDto);
 
         return "questions-list";
@@ -122,8 +142,9 @@ public class SurveyController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/surveys/{surveyId}/edit")
     public String editSurvey(@PathVariable long surveyId, Model model) {
-        SurveyDto survey = this.surveyService.findSurveyById(surveyId);
-        model.addAttribute("survey", survey);
+        SurveyDto surveyDto = this.surveyService.findSurveyById(surveyId);
+
+        model.addAttribute("survey", surveyDto);
 
         return "surveys-edit";
     }
@@ -131,6 +152,8 @@ public class SurveyController {
     @PostMapping("/surveys/{surveyId}/edit")
     public String updateSurvey(@PathVariable long surveyId,
             @Valid @ModelAttribute("survey") SurveyDto surveyDto, BindingResult result) {
+        String route = String.format("/surveys/%d?edit", surveyId);
+
         if (result.hasErrors()) {
             return "surveys-edit";
         }
@@ -138,7 +161,7 @@ public class SurveyController {
         surveyDto.setId(surveyId);
         this.surveyService.updateSurvey(surveyDto);
 
-        return ("redirect:/surveys?edit");
+        return "redirect:" + route;
     }
 
     @PreAuthorize("hasRole('ADMIN')")

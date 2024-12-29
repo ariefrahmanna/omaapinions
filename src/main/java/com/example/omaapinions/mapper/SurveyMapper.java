@@ -4,7 +4,7 @@ import java.util.stream.Collectors;
 
 import com.example.omaapinions.dto.SurveyDto;
 import static com.example.omaapinions.mapper.QuestionMapper.mapToQuestionDto;
-import com.example.omaapinions.models.Survey;   
+import com.example.omaapinions.models.Survey;
 
 public class SurveyMapper {
 
@@ -14,6 +14,7 @@ public class SurveyMapper {
                 .title(survey.getTitle())
                 .category(survey.getCategory())
                 .duration(survey.getDuration())
+                .description(survey.getDescription())
                 .questions(survey.getQuestions().stream().map((question) -> mapToQuestionDto(question))
                         .collect(Collectors.toList()))
                 .build();
@@ -25,6 +26,7 @@ public class SurveyMapper {
                 .title(survey.getTitle())
                 .category(survey.getCategory())
                 .duration(survey.getDuration())
+                .description(survey.getDescription())
                 .build();
     }
 }
