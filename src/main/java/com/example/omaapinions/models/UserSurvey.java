@@ -37,5 +37,5 @@ public class UserSurvey {
     public enum RoleEnum {
         ADMIN,
         USER
-    }
+    }
 }
