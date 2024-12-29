@@ -20,6 +20,7 @@ public class QuestionService {
     private QuestionRepository questionRepository;
     @SuppressWarnings("FieldMayBeFinal")
     private SurveyRepository surveyRepository;
+    @SuppressWarnings("FieldMayBeFinal")
     private SubmissionRepository submissionRepository;
 
     public QuestionService(QuestionRepository questionRepository, SurveyRepository surveyRepository,

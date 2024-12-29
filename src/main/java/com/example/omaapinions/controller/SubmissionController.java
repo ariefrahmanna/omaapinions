@@ -6,12 +6,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import static com.example.omaapinions.mapper.QuestionMapper.mapToQuestion;
 import static com.example.omaapinions.mapper.SurveyMapper.mapToSurvey;
+import com.example.omaapinions.models.Question;
 import com.example.omaapinions.models.Submission;
 import com.example.omaapinions.models.Survey;
-import com.example.omaapinions.models.Question;
 import com.example.omaapinions.models.UserSurvey;
 import com.example.omaapinions.security.SecurityUtil;
+import com.example.omaapinions.service.QuestionService;
 import com.example.omaapinions.service.SubmissionService;
 import com.example.omaapinions.service.SurveyService;
 import com.example.omaapinions.service.UserService;
@@ -25,15 +27,18 @@ public class SubmissionController {
     private UserService userService;
     @SuppressWarnings("FieldMayBeFinal")
     private SubmissionService submissionService;
+    @SuppressWarnings("FieldMayBeFinal")
+    private QuestionService questionService;
 
     public SubmissionController(SurveyService surveyService, UserService userService,
-            SubmissionService submissionService) {
+            SubmissionService submissionService, QuestionService questionService) {
         this.surveyService = surveyService;
         this.userService = userService;
         this.submissionService = submissionService;
+        this.questionService = questionService;
     }
 
-    @PostMapping("/submitSurvey")
+    @PostMapping("/surveys/{surveyId}/submit")
     public String submitSurvey(@RequestParam("survey_id") Long surveyId, @RequestParam Map<String, String> answers) {
         UserSurvey user = new UserSurvey();
         Survey survey = mapToSurvey(this.surveyService.findSurveyById(surveyId));
@@ -50,10 +55,9 @@ public class SubmissionController {
             if (key.startsWith("answers[") && key.endsWith("]")) {
                 String questionIdStr = key.substring(8, key.length() - 1);
                 Long questionId = Long.valueOf(questionIdStr);
+                Question question = mapToQuestion(this.questionService.findQuestionById(questionId));
                 Submission submission = new Submission();
-                Question question = new Question();
 
-                question.setId(questionId);
                 submission.setUser(user);
                 submission.setSurvey(survey);
                 submission.setQuestion(question);
