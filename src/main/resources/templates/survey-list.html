@@ -24,9 +24,6 @@
         <div th:if="${param.add}" class="alert alert-success">
           Survey succesfully added!
         </div>
-        <div th:if="${param.edit}" class="alert alert-success">
-          Survey succesfully edited!
-        </div>
         <div th:if="${param.del}" class="alert alert-success">
           Survey succesfully deleted!
         </div>
@@ -47,7 +44,7 @@
             <a class="text-decoration-none" th:href="@{/surveys/{surveyId}(surveyId=${survey.id})}">
               <div class="d-flex justify-content-between w-100 align-items-center">
                 <div>
-                  <span class="fw-bold">[[${survey.title}]]</span>
+                  <span class="fw-bold text-secondary">[[${survey.title}]]</span>
                   <div>
                     <small class="text-muted">Duration: [[${survey.duration}]] minutes</small>
                   </div>
