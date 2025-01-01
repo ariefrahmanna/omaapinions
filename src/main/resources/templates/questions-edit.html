@@ -17,34 +17,28 @@
   </script>
 </head>
 
-<body class="d-flex flex-column h-100">
-
-  <main class="flex-shrink-0">
-    <!-- Page Content -->
-    <section layout:fragment="content" class="py-5">
-      <div class="container">
-        <div class="mt-4">
-          <a th:href="@{/surveys/{surveyId}/questions(surveyId=${question.survey.id})}"
-            class="btn btn-secondary btn-sm">
-            back
-          </a>
-        </div>
-        <h1 class="mb-4">Edit Question</h1>
-        <form role="form" method="post" th:action="@{/questions/{questionId}/edit(questionId=${questionId})}"
-          th:object="${question}" onsubmit="showSuccessMessage(event)">
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="prompt">Question</label>
-              <input type="text" class="form-control" id="prompt" name="prompt" th:field="*{prompt}"
-                placeholder="Insert a question" required>
-            </div>
-            <button type="submit" class="btn btn-success mt-3">Save</button>
-          </div>
-        </form>
-
+<body>
+  <div layout:fragment="content" class="py-5">
+    <div class="container">
+      <div class="mt-4">
+        <a th:href="@{/surveys/{surveyId}/questions(surveyId=${question.survey.id})}" class="btn btn-secondary btn-sm">
+          back
+        </a>
       </div>
-    </section>
-  </main>
+      <h1 class="mb-4">Edit Question</h1>
+      <form role="form" method="post" th:action="@{/questions/{questionId}/edit(questionId=${questionId})}"
+        th:object="${question}" onsubmit="showSuccessMessage(event)">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="prompt">Question</label>
+            <input type="text" class="form-control" id="prompt" name="prompt" th:field="*{prompt}"
+              placeholder="Insert a question" required>
+          </div>
+          <button type="submit" class="btn btn-success mt-3">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
 
 </html>

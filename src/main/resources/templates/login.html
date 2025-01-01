@@ -13,45 +13,43 @@
     crossorigin="anonymous"></script>
 </head>
 
-<body class="d-flex flex-column h-100">
-  <main class="flex-shrink-0">
-    <section layout:fragment="content" class="py-5">
-      <div class="container mt-5">
-        <h2 class="text-center mb-4">Login</h2>
-        <div class="row justify-content-center">
-          <div class="col-md-6">
-            <div th:if="${param.success}" class="alert alert-success">
-              Successfully registered!
+<body>
+  <div layout:fragment="content" class="py-5">
+    <div class="container mt-5">
+      <h2 class="text-center mb-4">Login</h2>
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div th:if="${param.success}" class="alert alert-success">
+            Successfully registered!
+          </div>
+          <div th:if="${param.error}" class="alert alert-danger">
+            Invalid username and password.
+          </div>
+          <div th:if="${param.logout}" class="alert alert-danger">
+            You have been logged out.
+          </div>
+          <form th:action="@{/login}" method="post">
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username">
             </div>
-            <div th:if="${param.error}" class="alert alert-danger">
-              Invalid username and password.
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" name="password"
+                placeholder="Enter your password">
             </div>
-            <div th:if="${param.logout}" class="alert alert-danger">
-              You have been logged out.
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Login</button>
             </div>
-            <form th:action="@{/login}" method="post">
-              <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username">
-              </div>
-              <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password"
-                  placeholder="Enter your password">
-              </div>
-              <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Login</button>
-              </div>
-            </form>
-            <div class="text-center mt-3">
-              <span>Don't have an account?</span>
-              <a href="/register">Register here.</a>
-            </div>
+          </form>
+          <div class="text-center mt-3">
+            <span>Don't have an account?</span>
+            <a href="/register">Register here.</a>
           </div>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </div>
 </body>
 
 </html>

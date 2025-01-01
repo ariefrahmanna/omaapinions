@@ -20,55 +20,50 @@
   </script>
 </head>
 
-<body class="d-flex flex-column h-100">
-
-  <main class="flex-shrink-0">
-
-    <!-- Page Content -->
-    <section layout:fragment="content" class="py-5">
-      <div class="container">
-        <div class="mt-5">
-          <a th:href="@{/surveys/{surveyId}(surveyId=${surveyId})}" class="btn btn-secondary">
-            back
-          </a>
-        </div>
-        <h1 class="mb-4">[[${survey.title}]]: Add new Question</h1>
-        <form role="form" method="post" th:action="@{/surveys/{surveyId}/questions(surveyId=${surveyId})}"
-          th:object="${question}" onsubmit="showSuccessMessage(event)">
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="prompt">Question</label>
-              <input type="text" class="form-control" id="prompt" name="prompt" th:field="*{prompt}"
-                placeholder="Insert a Question" required>
-            </div>
-            <button type="submit" class="btn btn-success mt-3">Create</button>
-          </div>
-        </form>
-        <div th:if="${survey.questions.size() != 0}">
-          <table class="table table-hover table-bordered mt-4">
-            <thead>
-              <tr>
-                <!--<th scope="col">#</th>-->
-                <th scope="col">questions</th>
-                <th scope="col">action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr th:each="question : ${survey.questions}">
-                <td class="col-10">[[${question.prompt}]]</td>
-                <td class="col-2">
-                  <a th:href="@{/questions/{questionId}/edit(questionId=${question.id})}"
-                    class="btn btn-warning btn-sm mb-1 mx-2">Edit</a>
-                  <a th:href="@{/questions/delete/{questionId}(questionId=${question.id})}"
-                    class="btn btn-danger btn-sm mb-1 mx-2" onclick="return confirm('delete this question?')">Delete</a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+<body>
+  <div layout:fragment="content" class="py-5">
+    <div class="container">
+      <div class="mt-5">
+        <a th:href="@{/surveys/{surveyId}(surveyId=${surveyId})}" class="btn btn-secondary">
+          back
+        </a>
       </div>
-    </section>
-  </main>
+      <h1 class="mb-4">[[${survey.title}]]: Add new Question</h1>
+      <form role="form" method="post" th:action="@{/surveys/{surveyId}/questions(surveyId=${surveyId})}"
+        th:object="${question}" onsubmit="showSuccessMessage(event)">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="prompt">Question</label>
+            <input type="text" class="form-control" id="prompt" name="prompt" th:field="*{prompt}"
+              placeholder="Insert a Question" required>
+          </div>
+          <button type="submit" class="btn btn-success mt-3">Create</button>
+        </div>
+      </form>
+      <div th:if="${survey.questions.size() != 0}">
+        <table class="table table-hover table-bordered mt-4">
+          <thead>
+            <tr>
+              <!--<th scope="col">#</th>-->
+              <th scope="col">questions</th>
+              <th scope="col">action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="question : ${survey.questions}">
+              <td class="col-10">[[${question.prompt}]]</td>
+              <td class="col-2">
+                <a th:href="@{/questions/{questionId}/edit(questionId=${question.id})}"
+                  class="btn btn-warning btn-sm mb-1 mx-2">Edit</a>
+                <a th:href="@{/questions/delete/{questionId}(questionId=${question.id})}"
+                  class="btn btn-danger btn-sm mb-1 mx-2" onclick="return confirm('delete this question?')">Delete</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
