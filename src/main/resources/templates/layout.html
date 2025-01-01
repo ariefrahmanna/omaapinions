@@ -9,64 +9,68 @@
   <link th:href="@{/css/style.css}" rel="stylesheet /">
   <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">OMAAPINIONS</title>
 </head>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container px-5">
-    <a class="navbar-brand fw-bold" th:href="@{/}">OMAAPINIONS</a>
-    <!-- Navbar Toggler (Mobile) -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <!-- Navbar Links -->
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link fw-semibold" th:href="@{/}">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link fw-semibold" th:href="@{/leaderboard}">leaderboard</a>
-        </li>
-        <li sec:authorize="isAuthenticated()" class="nav-item">
-          <a class="nav-link fw-semibold" th:href="@{/surveys}">Surveys</a>
-        </li>
-        <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}" class="nav-item">
-          <a class="nav-link fw-semibold" th:href="@{/surveys/new}">Create Survey</a>
-        </li>
-        <li sec:authorize="isAuthenticated()" class="nav-item">
-          <a class="nav-link fw-semibold" th:href="@{/logout}">Logout</a>
-        </li>
-        <li sec:authorize="!isAuthenticated()" class="nav-item">
-          <a class="nav-link fw-semibold" th:href="@{/login}">Login</a>
-        </li>
+<body class="d-flex flex-column min-vh-100">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container px-5">
+      <a class="navbar-brand fw-bold" th:href="@{/}">OMAAPINIONS</a>
+      <!-- Navbar Toggler (Mobile) -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        <li sec:authorize="!isAuthenticated()" class="nav-item">
-          <a class="nav-link fw-semibold" th:href="@{/register}">register</a>
-        </li>
-      </ul>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Navbar Links -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" th:href="@{/}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" th:href="@{/leaderboard}">Leaderboard</a>
+          </li>
+          <li sec:authorize="isAuthenticated()" class="nav-item">
+            <a class="nav-link fw-semibold" th:href="@{/surveys}">Surveys</a>
+          </li>
+          <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}" class="nav-item">
+            <a class="nav-link fw-semibold" th:href="@{/surveys/new}">Create Survey</a>
+          </li>
+          <li sec:authorize="isAuthenticated()" class="nav-item">
+            <a class="nav-link fw-semibold" th:href="@{/logout}">Logout</a>
+          </li>
+          <li sec:authorize="!isAuthenticated()" class="nav-item">
+            <a class="nav-link fw-semibold" th:href="@{/login}">Login</a>
+          </li>
+
+          <li sec:authorize="!isAuthenticated()" class="nav-item">
+            <a class="nav-link fw-semibold" th:href="@{/register}">register</a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
-<body layout:fragment="body" class="h-100">
+  <main>
+    <div layout:fragment="content">
+      <!-- Default content can go here -->
+    </div>
+  </main>
 
+  <footer class="bg-dark py-4 text-white mt-auto">
+    <div class="container px-5">
+      <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+        <div class="col-auto">
+          <div class="small">Copyright &copy; OMAAPINIONS 2024</div>
+        </div>
+        <div class="col-auto">
+          <a class="link-light small me-2" href="#!">Privacy</a>
+          <a class="link-light small me-2" href="#!">Terms</a>
+          <a class="link-light small" href="#!">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
-<footer class="bg-dark py-4 text-white mt-auto">
-  <div class="container px-5">
-    <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-      <div class="col-auto">
-        <div class="small">Copyright &copy; OMAAPINIONS 2024</div>
-      </div>
-      <div class="col-auto">
-        <a class="link-light small me-2" href="#!">Privacy</a>
-        <a class="link-light small me-2" href="#!">Terms</a>
-        <a class="link-light small" href="#!">Contact</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </html>
