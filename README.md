@@ -29,7 +29,7 @@ Omaapinions is a survey management system designed to enable users to create, sh
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/omaapinions.git
+git clone https://github.com/ariefrahmanna/omaapinions.git
 cd omaapinions
 ```
 
